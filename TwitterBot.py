@@ -1,8 +1,8 @@
 #! python3
 # TwitterBot.py is a something
-# Notes to run this program you need to install Tweepy
+# Notes to run this program you need to install Tweepy, kivy, Cython, json, pandawh
 
-import sys, tweepy, kivy
+import sys, tweepy, kivy, time, re
 from tweepy import *
 from tweepy.streaming import StreamListener
 from tweepy import OAuthHandler
@@ -18,6 +18,9 @@ consumer_secret = ""
 access_token = ""
 access_token_secret = ""
 
+strtweet = ""
+tweet_data = []
+
 class TestApp(App):
     def build(self):
         return Button(text= "Hello world")
@@ -27,14 +30,15 @@ class MyStreamListener(tweepy.StreamListener):
 
     def on_status(self, status):
         # Prints the text of the tweet
-        print('Tweet text: ' + status.text)
-
+        strtweet = ('Tweet text: ' + status.text)
+        print strtweet
+        tweet_data.append(strtweet)
         # There are many options in the status object,
         # hashtags can be very easily accessed.
         #for hashtag in status.entries['hashtags']:
         #    print(hashtag['text'])
-
-        #return true
+        signalDone = True
+        return True
 
     def on_error(self, status_code):
         if status_code == 420:
@@ -66,15 +70,31 @@ def main():
     api = oauth_authenticate()
     myStream = tweepy.Stream(api.auth, myStreamListener)
 
-    #This line filter Twitter Streams to capture data by the keywords: 'python', 'javascript', 'ruby'
-    myStream.filter(track=['#Giveaway'])
+    tweets = myStream.filter(track=['#Giveaway'], async=True)
+
+    tweet_file = open("tweets.txt", "a")
+
+    '''
+    tweets_file = open("tweets_data_path.txt", "r")
+    for line in tweets_file:
+        try:
+            tweet = json.loads(line)
+            tweets_data.append(tweets)
+        except:
+            continue
+
+    print len(tweets_data)
+    '''
+    time.sleep(5)
+    myStream.disconnect()
+
 
     #results = api.search(q="#Giveaway")
 
     #for result in results:
     #    print result.text
 
-    public_tweets = api.home_timeline()
+    #public_tweets = api.home_timeline()
     #for tweet in public_tweets:
     #    print tweet.text
 
