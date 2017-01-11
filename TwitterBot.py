@@ -14,13 +14,12 @@ consumer_key = 	""
 consumer_secret = ""
 access_token = ""
 access_token_secret = ""
-strtweet = ""
-Tweet_array = []
 
 auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
 auth.set_access_token(access_token, access_token_secret)
 api = tweepy.API(auth)
 
+#Listener Streaming to catch tweets
 class MyStreamListener(tweepy.StreamListener):
     ''' Handles data received from the stream. '''
 
@@ -34,14 +33,25 @@ class MyStreamListener(tweepy.StreamListener):
         tweet_data = status.id
         if username != "pangjeremy0":
             try:
-                api.retweet(tweet_data)
-                api.create_friendship(status.user.screen_name)
+                # Usually giveaways include a photo this is to help filter out the
+                # "fake giveaway tweets"
+                # Check tweet if there is a photo
+                for x in status.entities.get("media",[{}]):
+                    #checks if there is any media-entity
+                    if x.get("type", None):
+                        # photoCheck
+                        if x.get("type", None) == "photo":
+                            print "Success this tweet has a photo"
+                #api.retweet(tweet_data)
+                #api.create_friendship(status.user.screen_name)
+                print "(Need to Rest)"
+                time.sleep(3)
             except tweepy.TweepError as e:
                 print "Error: Could not perform action"
                 pass
             #print "Holding"
-        print tweet_data
-        print status.text
+        #print tweet_data
+        #print status.text
         #print status
         #api.retweet()
         return True
@@ -54,6 +64,8 @@ class MyStreamListener(tweepy.StreamListener):
         print('Timeout...')
         return True # To continue listening
 
+#Function handles the authetification of Twitter
+#We need api to be global so this funciton isn't used
 def oauth_authenticate():
 
         auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
