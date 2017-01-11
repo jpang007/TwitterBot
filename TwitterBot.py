@@ -19,6 +19,13 @@ auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
 auth.set_access_token(access_token, access_token_secret)
 api = tweepy.API(auth)
 
+#Function to help kill followers to avoid hitting the limit
+def KillFriends():
+    # Lists out all friends in an array (sorted by date)
+    followers = api.friends_ids("pangjeremy0")
+    print followers
+    print api.get_user(418912007)
+
 #Listener Streaming to catch tweets
 class MyStreamListener(tweepy.StreamListener):
     ''' Handles data received from the stream. '''
@@ -33,6 +40,7 @@ class MyStreamListener(tweepy.StreamListener):
         tweet_data = status.id
         if username != "pangjeremy0":
             try:
+
                 # Usually giveaways include a photo this is to help filter out the
                 # "fake giveaway tweets"
                 # Check tweet if there is a photo
@@ -42,8 +50,10 @@ class MyStreamListener(tweepy.StreamListener):
                         # photoCheck
                         if x.get("type", None) == "photo":
                             print "Success this tweet has a photo"
-                #api.retweet(tweet_data)
-                #api.create_friendship(status.user.screen_name)
+                            print "Now RT, Favoriting, and Following!"
+                            #api.retweet(tweet_data)
+                            #api.create_favorite(tweet_data)
+                            #api.create_friendship(status.user.screen_name)
                 print "(Need to Rest)"
                 time.sleep(3)
             except tweepy.TweepError as e:
@@ -95,6 +105,7 @@ def main():
 
 if __name__ == '__main__':
     try:
+        KillFriends()
         main()
     except KeyboardInterrupt:
         print '\nBye!'
