@@ -1,6 +1,6 @@
 # TwitterBot
 Goals for this project:
-* Utilizie API and GUI to create a easy-to-use bot
+* Utilizie Twitter API to create a easy-to-use bot
 * Demonstrate my programming skills in a real-world application
 
 For a more in-depth explanation why I made this, go to documentation.md. 
