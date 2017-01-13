@@ -21,7 +21,7 @@ api = tweepy.API(auth)
 
 #Function to help kill followers to avoid hitting the limit
 def KillFriends():
-    # Lists out all friends in an array (sorted by date)
+    # Lists out all friends in an array (sorted)
     followers = api.friends_ids("pangjeremy0")
     print followers
     print api.get_user(418912007)
@@ -38,6 +38,7 @@ class MyStreamListener(tweepy.StreamListener):
 
         username = status.user.screen_name
         tweet_data = status.id
+        actualTweet = status.text
         if username != "pangjeremy0":
             try:
 
@@ -50,20 +51,22 @@ class MyStreamListener(tweepy.StreamListener):
                         # photoCheck
                         if x.get("type", None) == "photo":
                             print "Success this tweet has a photo"
-                            print "Now RT, Favoriting, and Following!"
-                            #api.retweet(tweet_data)
-                            #api.create_favorite(tweet_data)
-                            #api.create_friendship(status.user.screen_name)
+                            print actualTweet
+                            actualTweet = actualTweet.upper()
+                            if (u'RETWEET' in actualTweet or u'RT' in actualTweet):
+                                print "RT found"
+                                api.retweet(tweet_data)
+                            if (u'LIKE' in actualTweet or u'FAV' in actualTweet or u'FAVE' in actualTweet):
+                                print "Like found"
+                                api.create_favorite(tweet_data)
+                            if (u'FOLLOW' in actualTweet):
+                                print "Follow found"
+                                api.create_friendship(status.user.screen_name)
                 print "(Need to Rest)"
                 time.sleep(3)
             except tweepy.TweepError as e:
                 print "Error: Could not perform action"
                 pass
-            #print "Holding"
-        #print tweet_data
-        #print status.text
-        #print status
-        #api.retweet()
         return True
 
     def on_error(self, status_code):
@@ -105,7 +108,7 @@ def main():
 
 if __name__ == '__main__':
     try:
-        KillFriends()
+        #KillFriends()
         main()
     except KeyboardInterrupt:
         print '\nBye!'
