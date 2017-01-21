@@ -10,10 +10,10 @@ from tweepy import Stream
 #from kivy.app import App
 #from kivy.uix.button import Button
 
-consumer_key = 	""
-consumer_secret = ""
-access_token = ""
-access_token_secret = ""
+consumer_key = 	"tYHns57bP34xBdXSXzXRFplS8"
+consumer_secret = "RE2fOfkBsPjIyNdVFI7qe08VnUlCwHhc8MfODzGefsKYAP6QnE"
+access_token = "811268579949760512-48c2drQ11S4pLk689aR5XL3NqDqbZ0V"
+access_token_secret = "XYdIY0xzpEIUUn9JtIiJBZBhVEn9tiCrAu37V6alMqSJ7"
 
 auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
 auth.set_access_token(access_token, access_token_secret)
@@ -23,8 +23,8 @@ api = tweepy.API(auth)
 def KillFriends():
     # Lists out all friends in an array (sorted)
     followers = api.friends_ids("pangjeremy0")
-    print followers
-    print api.get_user(418912007)
+    print (followers)
+    print (api.get_user(418912007))
 
 #Listener Streaming to catch tweets
 class MyStreamListener(tweepy.StreamListener):
@@ -50,22 +50,22 @@ class MyStreamListener(tweepy.StreamListener):
                     if x.get("type", None):
                         # photoCheck
                         if x.get("type", None) == "photo":
-                            print "Success this tweet has a photo"
-                            print actualTweet
+                            print ("Success this tweet has a photo")
+                            print (actualTweet)
                             actualTweet = actualTweet.upper()
                             if (u'RETWEET' in actualTweet or u'RT' in actualTweet):
-                                print "RT found"
+                                print ("RT found")
                                 api.retweet(tweet_data)
                             if (u'LIKE' in actualTweet or u'FAV' in actualTweet or u'FAVE' in actualTweet):
-                                print "Like found"
+                                print ("Like found")
                                 api.create_favorite(tweet_data)
                             if (u'FOLLOW' in actualTweet):
-                                print "Follow found"
+                                print ("Follow found")
                                 api.create_friendship(status.user.screen_name)
-                print "(Need to Rest)"
+                print ("(Need to Rest)")
                 time.sleep(3)
             except tweepy.TweepError as e:
-                print "Error: Could not perform action"
+                print ("Error: Could not perform action")
                 pass
         return True
 
@@ -88,7 +88,7 @@ def oauth_authenticate():
             redirect_url = auth.get_authorization_url()
             #print redirect_url
         except tweepy.TweepError:
-            print 'Error! Failed to get request token.'
+            print ('Error! Failed to get request token.')
 
         api = tweepy.API(auth)
 
@@ -111,5 +111,5 @@ if __name__ == '__main__':
         #KillFriends()
         main()
     except KeyboardInterrupt:
-        print '\nBye!'
+        print ('\nBye!')
         sys.exit()
