@@ -19,12 +19,17 @@ auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
 auth.set_access_token(access_token, access_token_secret)
 api = tweepy.API(auth)
 
+followers = api.friends_ids("pangjeremy0")
+
 #Function to help kill followers to avoid hitting the limit
 def KillFriends():
     # Lists out all friends in an array (sorted)
-    followers = api.friends_ids("pangjeremy0")
-    print (followers)
-    print (api.get_user(418912007))
+
+    #print len(followers)
+    #print followers[-1]
+    if (len(followers) > 3500):
+        api.destroy_friendship(followers[-1])
+
 
 #Listener Streaming to catch tweets
 class MyStreamListener(tweepy.StreamListener):
@@ -35,6 +40,8 @@ class MyStreamListener(tweepy.StreamListener):
         #Tweet_array = json.loads(status)['username']
         #print status
         #self.api = api
+
+        KillFriends()
 
         username = status.user.screen_name
         tweet_data = status.id
@@ -59,7 +66,7 @@ class MyStreamListener(tweepy.StreamListener):
                             if (u'LIKE' in actualTweet or u'FAV' in actualTweet or u'FAVE' in actualTweet):
                                 print ("Like found")
                                 api.create_favorite(tweet_data)
-                            if (u'FOLLOW' in actualTweet):
+                            if (u'FOLLOW' or u'FLW' in actualTweet):
                                 print ("Follow found")
                                 api.create_friendship(status.user.screen_name)
                 print ("(Need to Rest)")
@@ -108,7 +115,6 @@ def main():
 
 if __name__ == '__main__':
     try:
-        #KillFriends()
         main()
     except KeyboardInterrupt:
         print ('\nBye!')
