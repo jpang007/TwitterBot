@@ -19,13 +19,13 @@ auth.set_access_token(access_token, access_token_secret)
 api = tweepy.API(auth)
 
 followers = api.friends_ids("pangjeremy0")
+ToKillList = ["One Direction", "Beliebers", "Selena", "Gomez", "Beiber", "Justin"]
 
 #Function to help kill followers to avoid hitting the limit
 def KillFriends():
     # Lists out all friends in an array (sorted)
 
     #print len(followers)
-    #git push -f origin HEAD^:masterprint followers[-1]
     if (len(followers) > 3500):
         api.destroy_friendship(followers[-1])
 
@@ -67,7 +67,7 @@ class MyStreamListener(tweepy.StreamListener):
                                     print ("Success this tweet has a photo")
                                     print (actualTweet)
                                     actualTweet = actualTweet.upper()
-                                    if (u'BESTFANARMY' in actualTweet or u'IHEARTAWARDS' in actualTweet):
+                                    if (u'BESTFANARMY' in actualTweet or u'IHEARTAWARDS' in actualTweet or u'NOW' in actualTweet):
                                         print ("PLZ NO")
                                         print ("MUST SKIP")
                                     else:
@@ -121,14 +121,15 @@ def main():
             myStream = tweepy.Stream(api.auth, myStreamListener)
             # Listening for new tweets
             myStream.filter(track=["Retweet to win"])
-        except IncompleteRead:
-            # Oh well, reconnect and keep trucking
-            continue
         except KeyboardInterrupt:
             # Or however you want to exit this loop
             myStream.disconnect()
             print ('\nBye!')
             break
+        except:
+            # Oh well, reconnect and keep trucking
+            print ("Restarting")
+            continue
     pass
 
 
