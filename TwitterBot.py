@@ -10,10 +10,10 @@ from tweepy import Stream
 #from kivy.app import App
 #from kivy.uix.button import Button
 
-consumer_key = 	"tYHns57bP34xBdXSXzXRFplS8"
-consumer_secret = "RE2fOfkBsPjIyNdVFI7qe08VnUlCwHhc8MfODzGefsKYAP6QnE"
-access_token = "811268579949760512-48c2drQ11S4pLk689aR5XL3NqDqbZ0V"
-access_token_secret = "XYdIY0xzpEIUUn9JtIiJBZBhVEn9tiCrAu37V6alMqSJ7"
+consumer_key = 	""
+consumer_secret = ""
+access_token = ""
+access_token_secret = ""
 
 auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
 auth.set_access_token(access_token, access_token_secret)
@@ -26,7 +26,7 @@ def KillFriends():
     # Lists out all friends in an array (sorted)
 
     #print len(followers)
-    #print followers[-1]
+    #git push -f origin HEAD^:masterprint followers[-1]
     if (len(followers) > 3500):
         api.destroy_friendship(followers[-1])
 
